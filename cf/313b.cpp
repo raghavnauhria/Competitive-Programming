@@ -38,9 +38,9 @@ int main()
 	int len = s.size();
 	vector<int> a(len, 0);
 
-	for (int i = 1; i < len; ++i)
+	for (int i = 0; i < len-1; ++i)
 	{
-		if(s[i] == s[i-1])
+		if(s[i] == s[i+1])
 			a[i] = 1;
 	}
 	for (int i = 1; i < len; ++i)
@@ -55,8 +55,12 @@ int main()
 	{
 		cin >> x >> y;
 		x--;y--;
-		
-		cout << a[y] - a[x] << endl;
+		y--;
+		if(x == 0)
+			cout << a[y];
+		else
+			cout << a[y] - a[x-1];
+		cout << endl;
 	}
 	
 	return 0;

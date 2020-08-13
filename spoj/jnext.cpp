@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+
 using namespace std;
 
 typedef long long int ll;
@@ -8,10 +9,8 @@ typedef pair<int, int> ii;
 typedef vector<ii> vii;
 typedef pair<ll, ll> pll;
 typedef vector<pll, pll> vll;
-typedef pair<ii, int> tri;
+typedef pair<int, ii> tri;
 typedef vector<tri> viii;
-typedef unordered_map<int, int> umap;
-typedef priority_queue<int> pq;
 
 #define fi(i,a,b) for(auto i=a;i<b;i++)
 #define rep(i,n) fi(i,0,n)
@@ -26,38 +25,63 @@ typedef priority_queue<int> pq;
 #define sc3(x) scanf("%s", x)
 #define sc4(x) scanf("%lld", &x)
 #define sc5(x, y) scanf("%lld %lld", &x, &y)
+#define MOD 1000000007
 
 int main()
 {
-	ios::sync_with_stdio(false);
-	cin.tie(NULL);
+ios::sync_with_stdio(false);
 
-	string s;
-	cin >> s;
-	 
-	int len = s.size();
-	vector<int> a(len, 0);
+int t, n, x, swap, temp;
+sc(t);
 
-	for (int i = 1; i < len; ++i)
-	{
-		if(s[i] == s[i-1])
-			a[i] = 1;
-	}
-	for (int i = 1; i < len; ++i)
-	{
-		a[i] += a[i-1];
-	}
-	 
-	int n, x, y;
-	cin >> n;
+while(t--)
+{
+	sc(n);
+	vi a;
 
-	while(n--)
+	fi(i, 0, n)
 	{
-		cin >> x >> y;
-		x--;y--;
-		
-		cout << a[y] - a[x] << endl;
+		sc(x);
+		a.pb(x);
 	}
 	
-	return 0;
+	temp=n;
+
+	fd(i, n-1, 0)
+	{
+		if( i>=1 && a[i] > a[i-1])
+		{
+			temp = i-1;
+			break;
+		}
+	}
+
+	if(temp == n)
+	{
+		printf("-1\n");
+		break;
+	}
+	
+	fd(i, n-1, temp)
+		if(a[i] > a[temp])
+		{
+			swap = a[i];
+			a[i] = a[temp];
+			a[temp] = swap;
+			break;
+		}
+
+	fi(i, temp+1, temp + 1+(n-1-temp)/2)
+	{
+		swap = a[i];
+		a[i] = a[n-i+temp];
+		a[n+temp-i] = swap;
+	}
+
+	fi(i, 0, n)
+		printf("%d", a[i]);
+	printf("\n");
+}
+
+return 0;
 }

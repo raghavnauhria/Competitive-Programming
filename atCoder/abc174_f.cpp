@@ -71,9 +71,66 @@ const int MOD = 1000000007;
 const ll INF = 1e18;
 const ld PI=3.141592653589793238462643383279502884197169399375105820974944;
 
+bool sortbysec(const tri &a, const tri &b)
+{
+	return (a.ff.ss < b.ff.ss);
+}
+
+void update(int idx, int val, vi &bit, int n)
+{
+	for (; idx <= n; idx += idx & -idx)
+		bit[idx] += val;
+}
+
+int query(int idx, vi bit, int n)
+{
+	int sum = 0;
+	for (; idx > 0; idx -= idx & -idx)
+		sum += bit[idx];
+	return sum;
+}
+
 int main()
 {
 	fastio; //Remove for interactive problems
+
+	cinii(n, q);
+	cinvi(arr, n);
+
+	viii queries;
+	// l, r, index
+
+	fi(i, 0, q)
+	{
+		cinii(l, r);
+		queries.pb( mp(mp(l-1, r-1), i) );
+	}
+	sort(all(queries), sortbysec);
+
+	vi bit(n+1, 0);
+	vi last_visit(n, -1);
+	vi ans(q, -1);
+
+	int query_counter = 0;
+	fi(i, 0, n)
+	{
+		if (last_visit[arr[i]] != -1)
+			update(last_visit[arr[i]] + 1, -1, bit, n);
+
+		last_visit[arr[i]] = i;
+		update(i + 1, 1, bit, n);
+
+		while (query_counter < q && queries[query_counter].ff.ss == i)
+		{
+			ans[queries[query_counter].ss] =
+				query(queries[query_counter].ff.ss + 1, bit, n) -
+				query(queries[query_counter].ff.ff, bit, n);
+			query_counter++;
+		}
+	}
+
+	fi(i, 0, q)
+		cout << ans[i] << endl;
 
 	return 0;
 }

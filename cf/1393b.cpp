@@ -71,65 +71,118 @@ const int MOD = 1000000007;
 const ll INF = 1e18;
 const ld PI=3.141592653589793238462643383279502884197169399375105820974944;
 
-int count(string substring, string s)
+umap counters[6];
+
+void recv(int x)
 {
-	int cnt = 0;
-	for (int i = 0; i < (int)s.size(); ++i)
+	bool there = false;
+	fi(c, 0, 5)
 	{
-		if (s.substr(i, substring.size()) == substring)
+		if (counters[c].find(x) != counters[c].end())
 		{
-			++cnt;
+			there = true;
+			// cout << "shifted " << x << " from " << c << " to " << c+1 << endl;
+			counters[c].erase(x);
+			counters[c + 1][x] = c + 2;
+
+			break;
 		}
 	}
+	if (counters[5].find(x) != counters[5].end() && !there)
+	{
+		there = true;
+		counters[5][x]++;
+	}
 
-	return cnt;
+	if(!there)
+	{
+		counters[0][x] = 1;
+		// cout << "added " << x << endl;
+	}
+}
+
+void remv(int x)
+{
+	if(counters[5].find(x) != counters[5].end())
+	{
+		counters[5][x]--;
+		if(counters[5][x] < 6)
+		{
+			counters[5].erase(x);
+			counters[4][x] = 5;
+		}
+	}
+	else
+	{
+		fd(c, 4, 1)
+		{
+			if (counters[c].find(x) != counters[c].end())
+			{
+				counters[c].erase(x);
+				counters[c-1][x] = c;
+				break;
+			}
+		}
+		if (counters[0].find(x) != counters[0].end())
+		{
+			counters[0].erase(x);
+		}
+	}
 }
 
 int main()
 {
 	fastio; //Remove for interactive problems
 
-	string substring = "abacaba";
-
-	cini(t);
-	while(t--)
+	cini(n);
+	cinvi(a, n);
+	cini(q);
+	
+	fi(i, 0, n)
 	{
-		cini(n);
-		cins(s);
+		recv(a[i]);
+	}
+	
+	fi(i, 0, q)
+	{
+		cinc(c);
+		cini(x);
+		if (c == '-')
+			remv(x);
+		else
+			recv(x);
 
-		bool ans = false;
+		string ans = "NO";
 
-		fi(i, 0, (n-substring.size()+1))
+		int temp = counters[3].size() + counters[4].size() + counters[5].size();
+		int temp2 = counters[1].size() + counters[2].size();
+
+		if(temp >= 2)
+			ans = "YES";
+		else if(temp == 1)
 		{
-			string temp = s;
-			bool convert = true;
-
-			fi(j, 0, substring.size())
+			if(temp2 >= 2)
 			{
-				if(temp[i+j] != '?' && temp[i+j] != substring[j])
-				{
-					convert = false;
-					break;
-				}
-				temp[i+j] = substring[j];
+				ans = "YES";
 			}
-
-			if(convert && count(substring, temp) == 1)
+			else if(temp2 == 1)
 			{
-				fi(i, 0, n)
+				if(counters[5].size() == 1)
 				{
-					if(temp[i] == '?')
-						temp[i] = 'z';
+					ans = "YES";
 				}
-				ans = true;
-				cout << "Yes\n" << temp << endl;
-
-				break;
+			}
+			else if(counters[5].size() == 1)
+			{
+				auto it = counters[5].begin();
+				if(it->second >= 8)
+				{
+					ans = "YES";
+				}
 			}
 		}
 
-		if(!ans)
-			cout << "No" << endl;
+		cout << ans << endl;
 	}
 
 	return 0;

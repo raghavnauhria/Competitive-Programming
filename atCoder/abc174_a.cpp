@@ -75,14 +75,14 @@ int main()
 {
 	fastio; //Remove for interactive problems
 
-	cini(t);
-	while(t--)
+	cini(x);
+	if(x >= 30)
+		cout << "Yes";
+	else
 	{
-		cinii(n, m);
-		ciniii(a, b, c);
-		cinvl(p, n);
-		sort(all(p));
+		cout << "No";
 	}
+	
 
 	return 0;
 }

@@ -71,65 +71,15 @@ const int MOD = 1000000007;
 const ll INF = 1e18;
 const ld PI=3.141592653589793238462643383279502884197169399375105820974944;
 
-int count(string substring, string s)
-{
-	int cnt = 0;
-	for (int i = 0; i < (int)s.size(); ++i)
-	{
-		if (s.substr(i, substring.size()) == substring)
-		{
-			++cnt;
-		}
-	}
-
-	return cnt;
-}
-
 int main()
 {
 	fastio; //Remove for interactive problems
 
-	string substring = "abacaba";
-
 	cini(t);
 	while(t--)
 	{
-		cini(n);
-		cins(s);
-
-		bool ans = false;
-
-		fi(i, 0, (n-substring.size()+1))
-		{
-			string temp = s;
-			bool convert = true;
-
-			fi(j, 0, substring.size())
-			{
-				if(temp[i+j] != '?' && temp[i+j] != substring[j])
-				{
-					convert = false;
-					break;
-				}
-				temp[i+j] = substring[j];
-			}
-
-			if(convert && count(substring, temp) == 1)
-			{
-				fi(i, 0, n)
-				{
-					if(temp[i] == '?')
-						temp[i] = 'z';
-				}
-				ans = true;
-				cout << "Yes\n" << temp << endl;
-
-				break;
-			}
-		}
-
-		if(!ans)
-			cout << "No" << endl;
+		cinl(n);
+		cout << n/2 + 1 << endl;
 	}
 
 	return 0;
