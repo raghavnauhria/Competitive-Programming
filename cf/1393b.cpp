@@ -103,13 +103,16 @@ void recv(int x)
 
 void remv(int x)
 {
+	bool removed = false;
 	if(counters[5].find(x) != counters[5].end())
 	{
 		counters[5][x]--;
+		removed = true;
 		if(counters[5][x] < 6)
 		{
 			counters[5].erase(x);
 			counters[4][x] = 5;
+			// cout << "shifted " << x << " from " << 5 << " to " << 4 << endl;
 		}
 	}
 	else
@@ -120,12 +123,16 @@ void remv(int x)
 			{
 				counters[c].erase(x);
 				counters[c-1][x] = c;
+				removed = true;
+				// cout << "shifted " << x << " from " << c << " to " << c - 1 << endl;
 				break;
 			}
 		}
-		if (counters[0].find(x) != counters[0].end())
+		if (!removed && counters[0].find(x) != counters[0].end())
 		{
 			counters[0].erase(x);
+			removed = true;
+			// cout << "removed " << x << endl;
 		}
 	}
 }
